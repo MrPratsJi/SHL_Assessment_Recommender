@@ -1,0 +1,15 @@
+embedding_model:
+  name: sentence-transformers/all-MiniLM-L6-v2
+  provider: HuggingFace
+  embedding_dimension: 384
+  purpose: Semantic retrieval over assessment profiles
+
+llm_model:
+  name: gpt-4o-mini
+  provider: OpenAI
+  purpose: Intent extraction and query understanding
+  temperature: 0.0
+
+versioning:
+  created_for: SHL GenAI Assessment Recommendation Task
+  pipeline_version: v1.0

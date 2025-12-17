@@ -1,0 +1,12 @@
+retrieval:
+  top_k_candidates: 50
+  final_result_count: 10
+
+scoring:
+  semantic_similarity_weight: 0.6
+  skill_overlap_weight: 0.25
+  test_type_alignment_weight: 0.15
+
+balancing:
+  min_results: 5
+  max_results: 10

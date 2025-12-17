@@ -1,0 +1,9 @@
+Extract hiring intent from the following query.
+
+Return JSON with:
+- hard_skills
+- soft_skills
+- desired_test_types
+
+Query:
+{{query}}

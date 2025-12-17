@@ -1,0 +1,26 @@
+{
+  "hard_skills": [
+    "java",
+    "python",
+    "sql",
+    "javascript",
+    "data",
+    "analytics",
+    "numerical",
+    "logical",
+    "cognitive",
+    "programming",
+    "engineering"
+  ],
+  "soft_skills": [
+    "communication",
+    "collaboration",
+    "leadership",
+    "team",
+    "stakeholder",
+    "behavior",
+    "personality",
+    "emotional",
+    "interpersonal"
+  ]
+}

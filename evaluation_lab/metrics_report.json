@@ -1,0 +1,15 @@
+{
+  "baseline": {
+    "description": "Semantic retrieval only (MPNet)",
+    "recall_at_10": 0.13
+  },
+  "final": {
+    "description": "Semantic + intent-aware ranking + balanced selection",
+    "recall_at_10": 0.1878
+  },
+  "improvements": [
+    "Switched from MiniLM to MPNet embeddings",
+    "Introduced intent-aware ranking signals",
+    "Enforced test-type balance in final selection"
+  ]
+}

@@ -1,0 +1,16 @@
+
+fastapi
+uvicorn
+pandas
+numpy
+openpyxl
+pyyaml
+requests
+beautifulsoup4
+python-multipart
+sentence-transformers
+transformers
+torch
+faiss-cpu
+openai
+tqdm
