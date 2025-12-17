@@ -1,51 +1,42 @@
-import json
 import os
 import faiss
-import numpy as np
+import json
 from semantic_index.embedding_gateway import generate_dense_vectors
 
+INDEX_DIR = "semantic_index/index_artifacts"
+INDEX_PATH = os.path.join(INDEX_DIR, "shl_faiss.index")
+META_PATH = os.path.join(INDEX_DIR, "shl_meta.json")
 CATALOG_PATH = "artifacts/shl_individual_assessments.json"
-INDEX_PATH = "semantic_index/index_artifacts/shl_faiss.index"
-
-os.makedirs("semantic_index/index_artifacts", exist_ok=True)
-
-def load_catalog():
-    with open(CATALOG_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
 
 def build_index():
-    catalog = load_catalog()
-    texts = [item["semantic_profile_text"] for item in catalog]
+    os.makedirs(INDEX_DIR, exist_ok=True)
+
+    with open(CATALOG_PATH, "r") as f:
+        catalog = json.load(f)
+
+    texts = [c["semantic_profile_text"] for c in catalog]
     vectors = generate_dense_vectors(texts)
-    dimension = vectors.shape[1]
-    index = faiss.IndexFlatIP(dimension)
-    faiss.normalize_L2(vectors)
+
+    dim = len(vectors[0])
+    index = faiss.IndexFlatL2(dim)
     index.add(vectors)
+
     faiss.write_index(index, INDEX_PATH)
-    return index, catalog
+
+    with open(META_PATH, "w") as f:
+        json.dump(
+            [{"name": c["name"], "url": c["url"], "test_types": c["test_types"]}
+             for c in catalog],
+            f
+        )
 
 def load_index():
+    if not os.path.exists(INDEX_PATH):
+        print("FAISS index not found. Building index...")
+        build_index()
+
     index = faiss.read_index(INDEX_PATH)
-    catalog = load_catalog()
-    return index, catalog
+    with open(META_PATH, "r") as f:
+        meta = json.load(f)
 
-def locate_candidates(query_text, top_k=40):
-    index, catalog = load_index()
-    query_vector = generate_dense_vectors([query_text])
-    faiss.normalize_L2(query_vector)
-    scores, indices = index.search(query_vector, top_k)
-    results = []
-    for score, idx in zip(scores[0], indices[0]):
-        record = catalog[idx]
-        results.append({
-            "assessment_id": record["assessment_id"],
-            "url": record["url"],
-            "name": record["name"],
-            "test_types": record["test_types"],
-            "semantic_score": float(score)
-        })
-    return results
-
-if __name__ == "__main__":
-    build_index()
-    print("FAISS index built and persisted")
+    return index, meta
