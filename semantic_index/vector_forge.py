@@ -11,7 +11,7 @@ CATALOG_PATH = "artifacts/shl_individual_assessments.json"
 def build_index():
     os.makedirs(INDEX_DIR, exist_ok=True)
 
-    with open(CATALOG_PATH, "r") as f:
+    with open(CATALOG_PATH, "r", encoding="utf-8") as f:
         catalog = json.load(f)
 
     texts = [c["semantic_profile_text"] for c in catalog]
@@ -44,8 +44,9 @@ def load_index():
         )
 
     index = faiss.read_index(INDEX_PATH)
-    with open(META_PATH, "r") as f:
+    with open(META_PATH, "r", encoding="utf-8") as f:
         meta = json.load(f)
+
 
     return index, meta
 
