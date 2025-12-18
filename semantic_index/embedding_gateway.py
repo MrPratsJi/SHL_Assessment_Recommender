@@ -9,7 +9,9 @@ def init_vectorizer():
         _model = SentenceTransformer("all-MiniLM-L6-v2")
 
 def generate_dense_vectors(texts):
-    init_vectorizer()
+    if _model is None:
+        init_vectorizer()
+
     vectors = _model.encode(
         texts,
         normalize_embeddings=True,
