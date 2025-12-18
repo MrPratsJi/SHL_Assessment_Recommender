@@ -16,9 +16,6 @@ def build_index():
 
     texts = [c["semantic_profile_text"] for c in catalog]
 
-    # 🔑 REQUIRED: initialize vectorizer once
-    init_vectorizer(texts)
-
     vectors = generate_dense_vectors(texts)
 
     dim = vectors.shape[1]
