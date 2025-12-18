@@ -1,7 +1,7 @@
 import os
 import faiss
 import json
-from semantic_index.embedding_gateway import init_vectorizer, generate_dense_vectors
+from semantic_index.embedding_gateway import generate_dense_vectors
 
 INDEX_DIR = "semantic_index/index_artifacts"
 INDEX_PATH = os.path.join(INDEX_DIR, "shl_faiss.index")
