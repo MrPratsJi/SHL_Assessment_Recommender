@@ -41,3 +41,6 @@ def load_index():
         meta = json.load(f)
 
     return index, meta
+
+if __name__ == "__main__":
+    build_index()
