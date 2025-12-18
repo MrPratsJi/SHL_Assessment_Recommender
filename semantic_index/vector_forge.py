@@ -32,8 +32,9 @@ def build_index():
 
 def load_index():
     if not os.path.exists(INDEX_PATH):
-        print("FAISS index not found. Building index...")
-        build_index()
+        raise RuntimeError(
+            "FAISS index missing. Build it locally and commit the artifact before deploy."
+        )
 
     index = faiss.read_index(INDEX_PATH)
     with open(META_PATH, "r") as f:
