@@ -1,7 +1,7 @@
 import os
 import faiss
 import json
-from semantic_index.embedding_gateway import generate_dense_vectors
+from semantic_index.embedding_gateway import init_vectorizer, generate_dense_vectors
 
 INDEX_DIR = "semantic_index/index_artifacts"
 INDEX_PATH = os.path.join(INDEX_DIR, "shl_faiss.index")
@@ -15,9 +15,13 @@ def build_index():
         catalog = json.load(f)
 
     texts = [c["semantic_profile_text"] for c in catalog]
+
+    # 🔑 REQUIRED: initialize vectorizer once
+    init_vectorizer(texts)
+
     vectors = generate_dense_vectors(texts)
 
-    dim = len(vectors[0])
+    dim = vectors.shape[1]
     index = faiss.IndexFlatL2(dim)
     index.add(vectors)
 
@@ -25,9 +29,15 @@ def build_index():
 
     with open(META_PATH, "w") as f:
         json.dump(
-            [{"name": c["name"], "url": c["url"], "test_types": c["test_types"]}
-             for c in catalog],
-            f
+            [
+                {
+                    "name": c["name"],
+                    "url": c["url"],
+                    "test_types": c["test_types"],
+                }
+                for c in catalog
+            ],
+            f,
         )
 
 def load_index():

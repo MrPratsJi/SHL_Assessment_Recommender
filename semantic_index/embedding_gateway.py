@@ -1,22 +1,20 @@
 import numpy as np
-from sentence_transformers import SentenceTransformer
+from sklearn.feature_extraction.text import TfidfVectorizer
 
-_model = None
+_vectorizer = None
 
-def get_model():
-    global _model
-    if _model is None:
-        _model = SentenceTransformer(
-            "all-MiniLM-L6-v2",
-            device="cpu"
-        )
-    return _model
+def init_vectorizer(corpus_texts):
+    global _vectorizer
+    _vectorizer = TfidfVectorizer(
+        max_features=4096,
+        ngram_range=(1, 2),
+        stop_words="english"
+    )
+    _vectorizer.fit(corpus_texts)
 
 def generate_dense_vectors(texts):
-    model = get_model()
-    vectors = model.encode(
-        texts,
-        normalize_embeddings=True,
-        show_progress_bar=False
-    )
-    return np.array(vectors, dtype="float32")
+    if _vectorizer is None:
+        raise RuntimeError("TF-IDF vectorizer not initialized")
+
+    vectors = _vectorizer.transform(texts).toarray()
+    return np.asarray(vectors, dtype="float32")
