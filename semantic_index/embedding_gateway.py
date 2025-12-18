@@ -1,27 +1,22 @@
-import os
 import numpy as np
+from sentence_transformers import SentenceTransformer
 
-_MODEL = None
+_model = None
 
-def _load_model():
-    global _MODEL
-    if _MODEL is None:
-        from sentence_transformers import SentenceTransformer
-        _MODEL = SentenceTransformer("all-MiniLM-L6-v2")
-    return _MODEL
-
+def get_model():
+    global _model
+    if _model is None:
+        _model = SentenceTransformer(
+            "all-MiniLM-L6-v2",
+            device="cpu"
+        )
+    return _model
 
 def generate_dense_vectors(texts):
-    if os.getenv("EMBEDDINGS_ENABLED", "false").lower() != "true":
-        raise RuntimeError(
-            "Embedding generation is disabled in production. "
-            "Use prebuilt FAISS index."
-        )
-
-    model = _load_model()
+    model = get_model()
     vectors = model.encode(
         texts,
         normalize_embeddings=True,
-        show_progress_bar=True
+        show_progress_bar=False
     )
     return np.array(vectors, dtype="float32")
