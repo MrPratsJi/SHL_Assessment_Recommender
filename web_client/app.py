@@ -5,7 +5,7 @@ import requests
 app = FastAPI()
 templates = Jinja2Templates(directory="web_client/templates")
 
-API_URL = "http://localhost:8000/recommend"
+API_URL = "https://shl-assessment-api-21yg.onrender.com/recommend"
 
 @app.get("/")
 def home(request: Request):
